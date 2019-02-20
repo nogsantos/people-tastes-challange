@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +11,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import 'typeface-roboto';
 
 import { AppContext } from './providers/app-context';
-import { Bar, Menu, AppSnackBar } from './components/index';
+import { Bar, AppDrawer, Menu, AppSnackBar } from './components/index';
+import { Root, Content, MainContent } from './AppStyle';
 
 const theme = createMuiTheme({
 	palette: {
@@ -28,13 +29,6 @@ const theme = createMuiTheme({
 const drawerWidth = 240;
 
 const styles = theme => ({
-	root: {
-		display: 'flex',
-		margin: 10
-	},
-	hide: {
-		display: 'none'
-	},
 	drawer: {
 		width: drawerWidth,
 		flexShrink: 0,
@@ -57,10 +51,6 @@ const styles = theme => ({
 		[theme.breakpoints.up('sm')]: {
 			width: theme.spacing.unit * 9 + 1
 		}
-	},
-	content: {
-		marginTop: 75,
-		width: '100%'
 	},
 	paper: {
 		padding: theme.spacing.unit * 2,
@@ -99,33 +89,38 @@ class App extends Component {
 		return (
 			<AppContext.Provider value={value}>
 				<MuiThemeProvider theme={theme}>
-					<div className={classes.root}>
-						<CssBaseline />
-						<Bar {...{ handleDrawerOpen }} />
-						<Drawer
-							variant="permanent"
-							className={classNames(classes.drawer, {
-								[classes.drawerOpen]: this.state.open,
-								[classes.drawerClose]: !this.state.open
-							})}
-							classes={{
-								paper: classNames({
+					<Root>
+						<Content>
+							<CssBaseline />
+							<Bar {...{ handleDrawerOpen }} />
+							<AppDrawer open={this.state.open}>
+								<Menu {...{ handleDrawerClose }} />
+							</AppDrawer>
+							{/* <Drawer
+								variant="permanent"
+								className={classNames(classes.drawer, {
 									[classes.drawerOpen]: this.state.open,
 									[classes.drawerClose]: !this.state.open
-								})
-							}}
-							open={this.state.open}
-						>
-							<Menu {...{ handleDrawerClose }} />
-						</Drawer>
-						<main className={classes.content}>
-							<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={24}>
-								<Grid item sm={12} xs={12} className={classes.leftSide}>
-									<Typography variant="h2">WIP</Typography>
+								})}
+								classes={{
+									paper: classNames({
+										[classes.drawerOpen]: this.state.open,
+										[classes.drawerClose]: !this.state.open
+									})
+								}}
+								open={this.state.open}
+							>
+								<Menu {...{ handleDrawerClose }} />
+							</Drawer> */}
+							<MainContent>
+								<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={24}>
+									<Grid item sm={12} xs={12}>
+										<Typography variant="h2">WIP</Typography>
+									</Grid>
 								</Grid>
-							</Grid>
-						</main>
-					</div>
+							</MainContent>
+						</Content>
+					</Root>
 					<AppSnackBar />
 				</MuiThemeProvider>
 			</AppContext.Provider>

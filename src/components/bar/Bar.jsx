@@ -8,12 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import { AppContext } from '../../providers/app-context';
+import { Root } from '../../AppStyle';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-	root: {
-		display: 'flex'
+	hide: {
+		display: 'none'
 	},
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1,
@@ -48,7 +49,7 @@ class Bar extends Component {
 			<AppContext.Consumer>
 				{({ handleDrawerOpen, open }) => (
 					<Fragment>
-						<div className={classes.root}>
+						<Root>
 							<AppBar
 								position="fixed"
 								className={classNames(classes.appBar, {
@@ -71,7 +72,7 @@ class Bar extends Component {
 									</Typography>
 								</Toolbar>
 							</AppBar>
-						</div>
+						</Root>
 					</Fragment>
 				)}
 			</AppContext.Consumer>

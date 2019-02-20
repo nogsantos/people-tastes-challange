@@ -14,13 +14,12 @@ import Typography from '@material-ui/core/Typography';
 
 import { AppContext } from '../../providers/app-context';
 import AppDialog from '../dialog/';
+
+import { StyledToolBar } from './MenuStyle';
+
 const emails = ['nogsantos@gmail.com'];
 const styles = theme => ({
 	toolbar: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		padding: '0 8px',
 		...theme.mixins.toolbar
 	},
 	content: {
@@ -30,10 +29,14 @@ const styles = theme => ({
 });
 
 class Menu extends Component {
-	state = {
-		open: false,
-		selectedValue: emails[1]
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			open: false,
+			selectedValue: emails[1]
+		};
+	}
 
 	handleClickOpen = () => {
 		this.setState({
@@ -56,14 +59,14 @@ class Menu extends Component {
 			<AppContext.Consumer>
 				{({ handleDrawerClose }) => (
 					<Fragment>
-						<div className={classes.toolbar}>
+						<StyledToolBar className={classes.toolbar}>
 							<Typography variant="subtitle1" gutterBottom>
 								Fabricio Nogueira
 							</Typography>
 							<IconButton onClick={this.menuAction}>
 								{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 							</IconButton>
-						</div>
+						</StyledToolBar>
 						<Divider />
 						<List>
 							<ListItem button key="Enviar mensagem" onClick={this.handleClickOpen}>
