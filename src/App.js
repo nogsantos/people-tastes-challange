@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import teal from '@material-ui/core/colors/teal';
-import Typography from '@material-ui/core/Typography';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import 'typeface-roboto';
 
 import { AppContext } from './providers/app-context';
-import { Bar, AppDrawer, Menu, AppSnackBar } from './components/index';
+import { Bar, AppDrawer, Menu, AppSnackBar } from './components/';
+import { Main } from './modules/';
 import { Root, Content, MainContent } from './AppStyle';
 
 const theme = createMuiTheme({
@@ -59,11 +58,7 @@ class App extends Component {
 								<Menu {...{ handleDrawerClose }} />
 							</AppDrawer>
 							<MainContent>
-								<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={24}>
-									<Grid item sm={12} xs={12}>
-										<Typography variant="h2">WIP</Typography>
-									</Grid>
-								</Grid>
+								<Main />
 							</MainContent>
 						</Content>
 					</Root>
