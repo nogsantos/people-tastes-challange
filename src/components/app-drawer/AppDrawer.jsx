@@ -28,13 +28,6 @@ const styles = theme => ({
 		[theme.breakpoints.up('sm')]: {
 			width: theme.spacing.unit * 9 + 1
 		}
-	},
-	paper: {
-		padding: theme.spacing.unit * 2,
-		color: theme.palette.text.secondary
-	},
-	rightSide: {
-		borderLeft: '1px solid #e0e0e0'
 	}
 });
 
