@@ -6,6 +6,7 @@ export const Root = styled.div`
 
 export const Content = styled(Root)`
 	margin: 10px;
+	width: 100%;
 `;
 
 export const MainContent = styled.main`
