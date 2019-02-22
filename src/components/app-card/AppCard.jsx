@@ -30,7 +30,10 @@ const styles = theme => ({
 	content: {
 		flex: '1 0 auto',
 		height: 210,
-		overflowY: 'auto'
+		overflowY: 'hidden',
+		'&:hover': {
+			overflowY: 'overlay'
+		}
 	},
 	cover: {
 		width: '100%',
