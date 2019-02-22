@@ -27,10 +27,10 @@ class Home extends Component {
 		return (
 			<Grid container className={classes.root}>
 				<Grid item xs={12}>
-					<Typography variant="h4">Selecione qual você prefere</Typography>
+					<Typography variant="h4">Say me which one do you prefer, choose one category</Typography>
 					<Grid
 						container
-						spacing={40}
+						spacing={16}
 						className={classes.container}
 						alignItems="center"
 						direction="row"
