@@ -8,9 +8,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import PublicIcon from '@material-ui/icons/Public';
 import MailIcon from '@material-ui/icons/Mail';
+import HomeIcon from '@material-ui/icons/Home';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import Typography from '@material-ui/core/Typography';
+import { withRouter } from 'react-router';
 
 import { AppContext } from '../../providers/app-context';
 import AppDialog from '../dialog/';
@@ -44,6 +47,12 @@ class Menu extends Component {
 		});
 	};
 
+	handleGoTo = link => {
+		if (link) {
+			this.props.history.push(`${link}`);
+		}
+	};
+
 	handleClose = value => {
 		this.setState({ selectedValue: value, open: false });
 	};
@@ -61,7 +70,7 @@ class Menu extends Component {
 					<Fragment>
 						<StyledToolBar className={classes.toolbar}>
 							<Typography variant="subtitle1" gutterBottom>
-								Fabricio Nogueira
+								by Fabricio Nogueira
 							</Typography>
 							<IconButton onClick={this.menuAction}>
 								{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -69,17 +78,29 @@ class Menu extends Component {
 						</StyledToolBar>
 						<Divider />
 						<List>
-							<ListItem button key="Enviar mensagem" onClick={this.handleClickOpen}>
+							<ListItem button key="home" onClick={() => this.handleGoTo('/')}>
+								<ListItemIcon>
+									<HomeIcon />
+								</ListItemIcon>
+								<ListItemText primary="Home" />
+							</ListItem>
+							<ListItem button key="favorite" onClick={() => this.handleGoTo('/my-favorites')}>
+								<ListItemIcon>
+									<FavoriteIcon />
+								</ListItemIcon>
+								<ListItemText primary="My Favorites" />
+							</ListItem>
+							<ListItem button key="developer" onClick={this.handleClickOpen}>
 								<ListItemIcon>
 									<MailIcon />
 								</ListItemIcon>
-								<ListItemText primary="Envie uma mensagem" />
+								<ListItemText primary="Send me a message" />
 							</ListItem>
-							<ListItem button key="Portfólio" component="a" href="https://fabricionogueira.me">
+							<ListItem button key="portfolio" component="a" href="https://fabricionogueira.me">
 								<ListItemIcon>
-									<InboxIcon />
+									<PublicIcon />
 								</ListItemIcon>
-								<ListItemText primary="Portfólio" />
+								<ListItemText primary="My Portfolio" />
 							</ListItem>
 						</List>
 						<AppDialog selectedValue={this.state.selectedValue} open={this.state.open} onClose={this.handleClose} />
@@ -89,4 +110,4 @@ class Menu extends Component {
 		);
 	}
 }
-export default withStyles(styles, { withTheme: true })(Menu);
+export default withStyles(styles, { withTheme: true })(withRouter(Menu));
