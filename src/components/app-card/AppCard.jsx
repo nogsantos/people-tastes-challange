@@ -12,6 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import teal from '@material-ui/core/colors/teal';
+import { withRouter } from 'react-router';
 
 import LocalDb from '../../providers/local-db';
 
@@ -75,17 +76,35 @@ class AppCard extends React.Component {
 		});
 	};
 
-	favorite = () =>
-		LocalDb.punkapi.add({ id: this.props.id, name: this.props.name, image_url: this.props.image_url }).then(id => {
-			this.setState(state => ({ favorited: !state.favorited }));
-		});
+	handleFavorite = () => {
+		if (this.state.favorited) {
+			this.removeFromFavorites();
+		} else {
+			this.addToFavorites();
+		}
+	};
+
+	addToFavorites = () =>
+		LocalDb.punkapi
+			.add({ id: this.props.id, name: this.props.name, image_url: this.props.image_url })
+			.then(id => this.favoriteStateManager());
+
+	removeFromFavorites = () => LocalDb.punkapi.delete(this.props.id).then(id => this.favoriteStateManager());
+
+	favoriteStateManager = () => {
+		this.setState(state => ({ favorited: !state.favorited }));
+	};
+
+	goToListView = () => {
+		this.props.history.push(`/punkapi/details/${this.props.id}`);
+	};
 
 	render() {
 		const { classes } = this.props;
 
 		return (
 			<Card key={this.props.id} className={classes.card}>
-				<CardActionArea>
+				<CardActionArea onClick={this.goToListView}>
 					<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={16}>
 						<Grid item sm={3} xs={12}>
 							<CardMedia className={classes.cover} height="140" image={this.props.image_url} title={this.props.name} />
@@ -113,7 +132,7 @@ class AppCard extends React.Component {
 							<IconButton
 								aria-label="Curtir"
 								className={classes.iconHover}
-								onClick={this.favorite}
+								onClick={this.handleFavorite}
 								color={this.state.favorited ? 'primary' : 'default'}
 							>
 								<FavoriteIcon />
@@ -135,4 +154,4 @@ AppCard.propTypes = {
 	description: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(AppCard);
+export default withStyles(styles)(withRouter(AppCard));

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import { ErrorHandler } from '../message-handlers/index';
 import { AppCard } from '../../components/';
+import { withRouter } from 'react-router';
 
 class Punkapi extends Component {
 	constructor(props) {
@@ -522,4 +523,4 @@ class Punkapi extends Component {
 	}
 }
 
-export default Punkapi;
+export default withRouter(Punkapi);
