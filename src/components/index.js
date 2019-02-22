@@ -4,3 +4,4 @@ export { default as AppChips } from './app-chips/';
 export { default as AppInput } from './app-input/';
 export { default as AppDrawer } from './app-drawer/';
 export { default as AppSnackBar } from './app-snackbar/';
+export { default as AppCard } from './app-card/';
