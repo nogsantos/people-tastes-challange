@@ -12,6 +12,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
 import axios from 'axios';
+import { setupCache } from 'axios-cache-adapter';
 
 import { ErrorHandler } from '../../message-handlers/index';
 import { Image } from './Style';
@@ -19,6 +20,13 @@ import { TableContainer } from '../../../AppStyle';
 import { DetailsStatelessRender } from './DetailsStatelessRender';
 
 import { MockBeer } from '../Mock';
+
+const cache = setupCache({
+	maxAge: 15 * 60 * 1000
+});
+const api = axios.create({
+	adapter: cache.adapter
+});
 
 const styles = theme => ({
 	root: {
@@ -73,9 +81,12 @@ class PunkapiDetails extends Component {
 
 	getDetail = id => {
 		this.setState({ loading: true });
-		axios
-			.get(`${process.env.REACT_APP_PUNKAPI_ADDRESS}/beers/${id}`)
-			.then(beer => {
+
+		api({
+			url: `${process.env.REACT_APP_PUNKAPI_ADDRESS}/beers/${id}`,
+			method: 'get'
+		})
+			.then(async beer => {
 				this.setState({
 					beer: Object.assign({}, ...beer.data),
 					loading: false

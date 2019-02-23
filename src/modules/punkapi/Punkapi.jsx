@@ -3,12 +3,20 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import axios from 'axios';
+import { setupCache } from 'axios-cache-adapter';
 
 import { ErrorHandler } from '../message-handlers/index';
 import { AppCard } from '../../components/';
 import { withRouter } from 'react-router';
 
 import { MockList } from './Mock';
+
+const cache = setupCache({
+	maxAge: 15 * 60 * 1000
+});
+const api = axios.create({
+	adapter: cache.adapter
+});
 
 class Punkapi extends Component {
 	constructor(props) {
@@ -23,7 +31,6 @@ class Punkapi extends Component {
 
 	componentDidMount() {
 		this.getValues();
-		window.scrollTo(0, 0);
 		window.addEventListener('scroll', this.handleScroll);
 	}
 
@@ -33,21 +40,20 @@ class Punkapi extends Component {
 
 	handleScroll = () => {
 		if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-			this.setState({ page: this.state.page + 1 }, this.getValues());
+			let nextPage = this.state.page + 1;
+			this.setState({ page: nextPage });
+			this.getValues();
 		}
 	};
 
-	getValues = page => {
-		this.setState({ loading: true });
-		axios
-			.get(`${process.env.REACT_APP_PUNKAPI_ADDRESS}/beers?page=${this.state.page}&per_page=10`)
-			.then(beers => {
+	getValues = () => {
+		api({
+			url: `${process.env.REACT_APP_PUNKAPI_ADDRESS}/beers?page=${this.state.page}&per_page=10`,
+			method: 'get'
+		})
+			.then(async beers => {
 				let currentList = this.state.punkapiList;
-				if (this.state.punkapiList.length > 0) {
-					currentList.push(...beers.data);
-				} else {
-					currentList = beers.data;
-				}
+				currentList.push(...beers.data);
 				this.setState({
 					punkapiList: currentList,
 					loading: false
