@@ -58,13 +58,17 @@ class PunkapiDetails extends Component {
 		};
 	}
 
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	componentWillMount() {
-		// if (this.props.match.params.id) {
-		// 	this.getDetail(this.props.match.params.id);
-		// }
-		this.setState({
-			beer: Object.assign({}, MockBeer())
-		});
+		if (this.props.match.params.id) {
+			this.getDetail(this.props.match.params.id);
+		}
+		// this.setState({
+		// 	beer: Object.assign({}, MockBeer())
+		// });
 	}
 
 	getDetail = id => {
