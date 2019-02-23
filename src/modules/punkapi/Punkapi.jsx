@@ -9,6 +9,7 @@ import { AppCard } from '../../components/';
 import { withRouter } from 'react-router';
 
 import { MockList } from './Mock';
+
 class Punkapi extends Component {
 	constructor(props) {
 		super(props);
@@ -21,20 +22,34 @@ class Punkapi extends Component {
 	}
 
 	componentDidMount() {
-		// this.getValues();
-
-		this.setState({
-			punkapiList: MockList()
-		});
+		this.getValues();
+		window.scrollTo(0, 0);
+		window.addEventListener('scroll', this.handleScroll);
 	}
 
-	getValues = () => {
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll);
+	}
+
+	handleScroll = () => {
+		if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+			this.setState({ page: this.state.page + 1 }, this.getValues());
+		}
+	};
+
+	getValues = page => {
 		this.setState({ loading: true });
 		axios
 			.get(`${process.env.REACT_APP_PUNKAPI_ADDRESS}/beers?page=${this.state.page}&per_page=10`)
 			.then(beers => {
+				let currentList = this.state.punkapiList;
+				if (this.state.punkapiList.length > 0) {
+					currentList.push(...beers.data);
+				} else {
+					currentList = beers.data;
+				}
 				this.setState({
-					punkapiList: beers.data,
+					punkapiList: currentList,
 					loading: false
 				});
 			})
