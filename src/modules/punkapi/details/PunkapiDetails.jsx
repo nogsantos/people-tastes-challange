@@ -19,7 +19,7 @@ import { Image } from './Style';
 import { TableContainer } from '../../../AppStyle';
 import { DetailsStatelessRender } from './DetailsStatelessRender';
 
-import { MockBeer } from '../Mock';
+// import { MockBeer } from '../Mock';
 
 const cache = setupCache({
 	maxAge: 15 * 60 * 1000
