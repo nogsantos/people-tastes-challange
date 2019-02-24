@@ -131,9 +131,14 @@ class AppCard extends React.Component {
 				</CardActionArea>
 				<CardActions className={classes.actions}>
 					<Grid container direction="row" justify="center" alignItems="center">
-						<Tooltip placement="bottom" title="Curtir" aria-label="Curtir" classes={{ tooltip: classes.lightTooltip }}>
+						<Tooltip
+							placement="bottom"
+							title={this.state.favorited ? 'Liked' : 'Like'}
+							aria-label={this.state.favorited ? 'Liked' : 'Like'}
+							classes={{ tooltip: classes.lightTooltip }}
+						>
 							<IconButton
-								aria-label="Curtir"
+								aria-label={this.state.favorited ? 'Liked' : 'Like'}
 								className={classes.iconHover}
 								onClick={this.handleFavorite}
 								color={this.state.favorited ? 'primary' : 'default'}
