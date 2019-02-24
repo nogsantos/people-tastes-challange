@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 
 const styles = theme => ({
 	root: {
@@ -31,9 +32,15 @@ class AppInput extends Component {
 					label={this.props.label}
 					value={this.props.value}
 					onChange={this.props.onChange}
-					InputProps={{
-						startAdornment: <InputAdornment position="start">#</InputAdornment>
-					}}
+					InputProps={
+						this.props.isTypeSearch && {
+							startAdornment: (
+								<InputAdornment position="start">
+									<SearchIcon />
+								</InputAdornment>
+							)
+						}
+					}
 				/>
 			</div>
 		);
