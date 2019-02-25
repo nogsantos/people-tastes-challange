@@ -50,7 +50,7 @@ class App extends Component {
 		return (
 			<AppContext.Provider value={value}>
 				<MuiThemeProvider theme={theme}>
-					<Root>
+					<Root data-testid="app-root">
 						<Content>
 							<CssBaseline />
 							<Bar {...{ handleDrawerOpen }} />

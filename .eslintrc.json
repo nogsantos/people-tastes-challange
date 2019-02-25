@@ -14,7 +14,13 @@
 		"ecmaVersion": 2018
 	},
 	"rules": {
-		"indent": ["warn", "tab"],
+		"indent": [
+			"warn",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
 		"quotes": ["error", "single"],
 		"no-unused-vars": "warn",
 		"no-undef": "warn",
