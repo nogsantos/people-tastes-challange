@@ -10,10 +10,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import teal from '@material-ui/core/colors/teal';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import axios from 'axios';
 import { setupCache } from 'axios-cache-adapter';
 
+import FavoriteService from '../../../services/favorite/FavoriteService';
 import { ErrorHandler } from '../../message-handlers/index';
 import { Image } from './Style';
 import { TableContainer } from '../../../AppStyle';
@@ -52,6 +54,12 @@ const styles = theme => ({
 	author: {
 		textAlign: 'right',
 		paddingTop: 10
+	},
+	lightTooltip: {
+		backgroundColor: theme.palette.common.white,
+		color: 'rgba(0, 0, 0, 0.87)',
+		boxShadow: theme.shadows[1],
+		fontSize: 12
 	}
 });
 
@@ -62,6 +70,7 @@ class PunkapiDetails extends Component {
 		this.state = {
 			loading: true,
 			id: null,
+			favorited: false,
 			beer: {}
 		};
 	}
@@ -74,9 +83,8 @@ class PunkapiDetails extends Component {
 		if (this.props.match.params.id) {
 			this.getDetail(this.props.match.params.id);
 		}
-		// this.setState({
-		// 	beer: Object.assign({}, MockBeer())
-		// });
+
+		// this.setState({ beer: Object.assign({}, MockBeer()) }, () => this.checkIfIsFavorited());
 	}
 
 	getDetail = id => {
@@ -87,15 +95,47 @@ class PunkapiDetails extends Component {
 			method: 'get'
 		})
 			.then(async beer => {
-				this.setState({
-					beer: Object.assign({}, ...beer.data),
-					loading: false
-				});
+				this.setState(
+					{
+						beer: Object.assign({}, ...beer.data),
+						loading: false
+					},
+					() => this.checkIfIsFavorited()
+				);
 			})
 			.catch(error => {
 				this.setState({ loading: false });
 				new ErrorHandler(error).catcher();
 			});
+	};
+
+	checkIfIsFavorited() {
+		new FavoriteService('punkapi').getFavoriteById(this.state.beer.id).then(favorite => {
+			this.setState({
+				favorited: favorite && favorite.id !== null
+			});
+		});
+	}
+
+	handleFavorite = () => {
+		if (this.state.favorited) {
+			this.removeFromFavorites();
+		} else {
+			this.addToFavorites();
+		}
+	};
+
+	addToFavorites = () =>
+		new FavoriteService('punkapi').addToFavorites(
+			{ id: this.state.beer.id, name: this.state.beer.name, image_url: this.state.beer.image_url },
+			this.favoriteStateManager
+		);
+
+	removeFromFavorites = () =>
+		new FavoriteService('punkapi').removeFromFavorites(this.state.beer.id, this.favoriteStateManager);
+
+	favoriteStateManager = () => {
+		this.setState(state => ({ favorited: !state.favorited }));
 	};
 
 	render() {
@@ -130,14 +170,21 @@ class PunkapiDetails extends Component {
 													<Typography variant="body2">{ingredients.yeast}</Typography>
 												)}
 											</Typography>
-											<IconButton
-												aria-label="Curtir"
-												className={classes.iconHover}
-												onClick={this.handleFavorite}
-												color={this.state.favorited ? 'primary' : 'default'}
+											<Tooltip
+												placement="bottom"
+												title={this.state.favorited ? 'Liked' : 'Like'}
+												aria-label={this.state.favorited ? 'Liked' : 'Like'}
+												classes={{ tooltip: classes.lightTooltip }}
 											>
-												<FavoriteIcon />
-											</IconButton>
+												<IconButton
+													aria-label={this.state.favorited ? 'Liked' : 'Like'}
+													className={classes.iconHover}
+													onClick={this.handleFavorite}
+													color={this.state.favorited ? 'primary' : 'default'}
+												>
+													<FavoriteIcon />
+												</IconButton>
+											</Tooltip>
 										</Grid>
 									</Toolbar>
 								</AppBar>
