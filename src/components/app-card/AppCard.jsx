@@ -14,7 +14,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import teal from '@material-ui/core/colors/teal';
 import { withRouter } from 'react-router';
 
-import LocalDb from '../../providers/local-db';
+import FavoriteService from '../../services/favorite/FavoriteService';
 
 const styles = theme => ({
 	card: {
@@ -71,13 +71,10 @@ class AppCard extends React.Component {
 		this.getFavorites();
 	}
 
-	getFavorites = () => {
-		LocalDb.punkapi.each(favorit => {
-			if (favorit.id === this.props.id) {
-				this.setState({ favorited: true });
-			}
+	getFavorites = () =>
+		new FavoriteService('punkapi').getFavoriteById(this.props.id).then(favorite => {
+			this.setState({ favorited: favorite && favorite.id !== null });
 		});
-	};
 
 	handleFavorite = () => {
 		if (this.state.favorited) {
@@ -88,11 +85,13 @@ class AppCard extends React.Component {
 	};
 
 	addToFavorites = () =>
-		LocalDb.punkapi
-			.add({ id: this.props.id, name: this.props.name, image_url: this.props.image_url })
-			.then(id => this.favoriteStateManager());
+		new FavoriteService('punkapi').addToFavorites(
+			{ id: this.props.id, name: this.props.name, image_url: this.props.image_url },
+			this.favoriteStateManager
+		);
 
-	removeFromFavorites = () => LocalDb.punkapi.delete(this.props.id).then(id => this.favoriteStateManager());
+	removeFromFavorites = () =>
+		new FavoriteService('punkapi').removeFromFavorites(this.props.id, this.favoriteStateManager);
 
 	favoriteStateManager = () => {
 		this.setState(state => ({ favorited: !state.favorited }));
