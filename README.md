@@ -1,5 +1,7 @@
 # People Tastes
 
+[![CircleCI](https://circleci.com/gh/nogsantos/people-tastes-challange.svg?style=svg)](https://circleci.com/gh/nogsantos/people-tastes-challange)
+
 by Fabricio Nogueira - [nogsantos@gmail.com](https://fabricionogueira.me)
 
 ## What
