@@ -20,12 +20,12 @@ const styles = theme => ({
 	card: {
 		position: 'relative',
 		display: 'flex',
-		minHeight: 290,
 		maxHeight: 290,
 		margin: 8
 	},
 	title: {
-		marginTop: 10
+		marginTop: 10,
+		marginLeft: 5
 	},
 	content: {
 		flex: '1 0 auto',
@@ -108,23 +108,34 @@ class AppCard extends React.Component {
 			<Card key={this.props.id} className={classes.card}>
 				<CardActionArea onClick={this.goToDetailsView}>
 					<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={16}>
-						<Grid item sm={3} xs={12}>
-							<CardMedia className={classes.cover} height="140" image={this.props.image_url} title={this.props.name} />
-						</Grid>
+						{this.props.image_url && (
+							<Grid item sm={3} xs={12}>
+								<CardMedia
+									className={classes.cover}
+									height="140"
+									image={this.props.image_url}
+									title={this.props.name}
+								/>
+							</Grid>
+						)}
 						<Grid item sm={9} xs={12}>
 							<Grid item sm={12} xs={12} className={classes.title}>
 								<Typography variant="h5" gutterBottom>
-									{this.props.name}
+									{this.props.name} - {this.props.id}
 								</Typography>
-								<Typography variant="caption" gutterBottom>
-									{this.props.tagline}
-								</Typography>
+								{this.props.tagline && (
+									<Typography variant="caption" gutterBottom>
+										{this.props.tagline}
+									</Typography>
+								)}
 							</Grid>
-							<CardContent className={classes.content}>
-								<Grid item sm={12} xs={12}>
-									<Typography variant="body1">{this.props.description}</Typography>
-								</Grid>
-							</CardContent>
+							{this.props.description && (
+								<CardContent className={classes.content}>
+									<Grid item sm={12} xs={12}>
+										<Typography variant="body1">{this.props.description}</Typography>
+									</Grid>
+								</CardContent>
+							)}
 						</Grid>
 					</Grid>
 				</CardActionArea>
@@ -154,7 +165,7 @@ class AppCard extends React.Component {
 
 AppCard.propTypes = {
 	classes: PropTypes.object.isRequired,
-	id: PropTypes.number.isRequired,
+	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	name: PropTypes.string.isRequired,
 	image_url: PropTypes.string.isRequired,
 	tagline: PropTypes.string.isRequired,
