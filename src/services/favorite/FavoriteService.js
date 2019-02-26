@@ -9,7 +9,7 @@ class FavoriteService {
 	}
 
 	getAllFavorites = () => {
-		LocalDb[this.database].each(favorits => favorits);
+		return LocalDb[this.database].toArray();
 	};
 
 	getFavoriteById = id => {
