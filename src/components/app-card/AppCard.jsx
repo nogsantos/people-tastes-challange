@@ -97,7 +97,7 @@ class AppCard extends React.Component {
 		this.setState(state => ({ favorited: !state.favorited }));
 	};
 
-	goToListView = () => {
+	goToDetailsView = () => {
 		this.props.history.push(`/punkapi/details/${this.props.id}`);
 	};
 
@@ -106,7 +106,7 @@ class AppCard extends React.Component {
 
 		return (
 			<Card key={this.props.id} className={classes.card}>
-				<CardActionArea onClick={this.goToListView}>
+				<CardActionArea onClick={this.goToDetailsView}>
 					<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={16}>
 						<Grid item sm={3} xs={12}>
 							<CardMedia className={classes.cover} height="140" image={this.props.image_url} title={this.props.name} />
