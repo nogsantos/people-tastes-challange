@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
 
 import Img from 'react-image';
 
@@ -55,7 +56,8 @@ class Home extends Component {
 		return (
 			<Grid container className={classes.root}>
 				<Grid item xs={12}>
-					<Typography variant="h4">Say me which one do you prefer, choose a category</Typography>
+					<Typography variant="h3">Say me which one do you prefer, choose a category</Typography>
+					<Divider variant="fullWidth" />
 					<Grid
 						container
 						spacing={16}

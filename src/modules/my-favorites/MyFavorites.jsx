@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { withRouter } from 'react-router';
 import teal from '@material-ui/core/colors/teal';
+import Divider from '@material-ui/core/Divider';
 
 import FavoriteService from '../../services/favorite/FavoriteService';
 
@@ -60,6 +61,7 @@ class MyFavorites extends Component {
 			<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={8}>
 				<Grid item sm={12} xs={12}>
 					<Typography variant="h3">MyFavorites</Typography>
+					<Divider variant="fullWidth" />
 				</Grid>
 				<Grid item sm={6} xs={12}>
 					<Paper className={classes.paper}>

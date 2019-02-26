@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 import axios from 'axios';
 import { setupCache } from 'axios-cache-adapter';
@@ -150,6 +151,7 @@ class Punkapi extends Component {
 							</form>
 						</Grid>
 					</Grid>
+					<Divider variant="fullWidth" />
 				</Grid>
 				{punkapiList.map(beer => {
 					return (
