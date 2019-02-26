@@ -121,7 +121,7 @@ class AppCard extends React.Component {
 						<Grid item sm={9} xs={12}>
 							<Grid item sm={12} xs={12} className={classes.title}>
 								<Typography variant="h5" gutterBottom>
-									{this.props.name} - {this.props.id}
+									{this.props.name}
 								</Typography>
 								{this.props.tagline && (
 									<Typography variant="caption" gutterBottom>

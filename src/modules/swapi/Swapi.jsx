@@ -161,7 +161,7 @@ class Swapi extends Component {
 									<AppCard
 										id={(swapi.name || swapi.title)
 											.trim()
-											.replace(/[`'-\s\/]/g, '_')
+                                            .replace(/[`'-/\s]/g, '_')
 											.toLowerCase()}
 										name={swapi.name || swapi.title}
 										tagline={
