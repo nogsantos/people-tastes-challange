@@ -167,7 +167,7 @@ class AppCard extends React.Component {
 				<CardActionArea onClick={this.goToDetailsView}>
 					<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={16}>
 						{this.props.image_url && (
-							<Grid item sm={3} xs={12}>
+							<Grid data-testid="image-card" item sm={3} xs={12}>
 								<CardMedia
 									className={classes.cover}
 									height="140"

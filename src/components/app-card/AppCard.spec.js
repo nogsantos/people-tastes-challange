@@ -36,15 +36,24 @@ describe('AppCard component', () => {
 			image_url: 'some'
 		};
 
-		const { render } = renderWithRouter(<AppCard {...props} />);
-
-		console.log('render', render);
-
-		// const { getByTestId, rerender } = render(<NumberDisplay number={1} />)
-		// expect(getByTestId('number-display').textContent).toBe('1')
-		// // re-render the same component with different props
-		// rerender(<NumberDisplay number={2} />)
-		// expect(getByTestId('number-display').textContent).toBe('2')
-		// expect(getByTestId('instance-id').textContent).toBe('1')
+		const { getByTestId } = renderWithRouter(<AppCard {...props} />);
+		const target = getByTestId('image-card');
+		expect(target).not.toBe(null);
 	});
+
+	// test('should not to render a card with media when the props image_url has not passed', () => {
+	// 	const props = {
+	// 		id: 'some',
+	// 		name: 'some',
+	// 		module: 'some',
+    //         tagline: 'some',
+    //         image_url: 'some'
+	// 	};
+	// 	const { getByTestId } = renderWithRouter(<AppCard {...props} />);
+    //     getByTestId('image-card');
+
+    //     console.log('get', getByTestId);
+
+    //     // expect(e).toBeUndefined();
+	// });
 });
