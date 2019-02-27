@@ -15,6 +15,7 @@ import teal from '@material-ui/core/colors/teal';
 import { withRouter } from 'react-router';
 
 import FavoriteService from '../../services/favorite/FavoriteService';
+import { ErrorHandler } from '../../modules/message-handlers/index';
 
 const styles = theme => ({
 	card: {
@@ -71,10 +72,22 @@ class AppCard extends React.Component {
 		this.getFavorites();
 	}
 
-	getFavorites = () =>
-		new FavoriteService('punkapi').getFavoriteById(this.props.id).then(favorite => {
-			this.setState({ favorited: favorite && favorite.id !== null });
-		});
+	getFavorites = () => {
+		if (this.props.module && this.props.id) {
+			new FavoriteService(this.props.module).getFavoriteById(this.props.id).then(favorite => {
+				this.setState({ favorited: favorite && favorite.id !== null });
+			});
+		} else {
+			new ErrorHandler({
+				response: {
+					data: {
+						status: 400,
+						message: 'Sorry, an error occurred when tries to get favorite values'
+					}
+				}
+			}).catcher();
+		}
+	};
 
 	handleFavorite = () => {
 		if (this.state.favorited) {
@@ -84,21 +97,66 @@ class AppCard extends React.Component {
 		}
 	};
 
-	addToFavorites = () =>
-		new FavoriteService('punkapi').addToFavorites(
-			{ id: this.props.id, name: this.props.name, image_url: this.props.image_url },
-			this.favoriteStateManager
-		);
+	addToFavorites = () => {
+		if (this.props.module) {
+			let objectPersister = {
+				id: this.props.id,
+				name: this.props.name
+			};
 
-	removeFromFavorites = () =>
-		new FavoriteService('punkapi').removeFromFavorites(this.props.id, this.favoriteStateManager);
+			if (this.props.image_url) {
+				objectPersister.image_url = this.props.image_url;
+			}
+
+			if (this.props.category) {
+				objectPersister.category = this.props.category;
+			}
+
+			new FavoriteService(this.props.module).addToFavorites(objectPersister, this.favoriteStateManager);
+		} else {
+			new ErrorHandler({
+				response: {
+					data: {
+						status: 400,
+						message: 'Sorry, an error occurred when tries to add a favorite values'
+					}
+				}
+			}).catcher();
+		}
+	};
+
+	removeFromFavorites = () => {
+		if (this.props.module && this.props.id) {
+			new FavoriteService(this.props.module).removeFromFavorites(this.props.id, this.favoriteStateManager);
+		} else {
+			new ErrorHandler({
+				response: {
+					data: {
+						status: 400,
+						message: 'Sorry, an error occurred when tries to removes from favorite values'
+					}
+				}
+			}).catcher();
+		}
+	};
 
 	favoriteStateManager = () => {
 		this.setState(state => ({ favorited: !state.favorited }));
 	};
 
 	goToDetailsView = () => {
-		this.props.history.push(`/punkapi/details/${this.props.id}`);
+		if (this.props.module && this.props.id) {
+			this.props.history.push(`/${this.props.module}/details/${this.props.id}`);
+		} else {
+			new ErrorHandler({
+				response: {
+					data: {
+						status: 400,
+						message: 'Sorry, an error occurred when tries to removes from favorite values'
+					}
+				}
+			}).catcher();
+		}
 	};
 
 	render() {
@@ -167,9 +225,11 @@ AppCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	name: PropTypes.string.isRequired,
-	image_url: PropTypes.string.isRequired,
+	module: PropTypes.string.isRequired,
 	tagline: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired
+	image_url: PropTypes.string,
+	category: PropTypes.string,
+	description: PropTypes.string
 };
 
 export default withStyles(styles)(withRouter(AppCard));

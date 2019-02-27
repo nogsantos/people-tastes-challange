@@ -136,7 +136,7 @@ class Punkapi extends Component {
 					>
 						<Grid item sm={6} xs={12}>
 							<Typography variant="h3" gutterBottom>
-								Punkapi
+								Beers
 							</Typography>
 						</Grid>
 						<Grid item sm={6} xs={12}>
@@ -162,6 +162,7 @@ class Punkapi extends Component {
 								tagline={beer.tagline}
 								description={beer.description}
 								image_url={beer.image_url}
+								module="punkapi"
 							/>
 						</Grid>
 					);

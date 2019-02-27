@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -13,7 +13,7 @@ import { withRouter } from 'react-router';
 import teal from '@material-ui/core/colors/teal';
 import Divider from '@material-ui/core/Divider';
 
-import FavoriteService from '../../services/favorite/FavoriteService';
+import { CategoryIconsService, FavoriteService } from '../../services/';
 
 const styles = theme => ({
 	paper: {
@@ -66,36 +66,46 @@ class MyFavorites extends Component {
 				<Grid item sm={6} xs={12}>
 					<Paper className={classes.paper}>
 						<List dense={false}>
-							{swapiList &&
+							{swapiList.length > 0 ? (
 								swapiList.map(swapi => {
 									return (
-										<ListItem button onClick={() => this.goToDetailsView('swapi', swapi.id)}>
-											<FavoriteIcon className={classes.icon} />
-											<ListItemText primary={swapi.name} />
-											<ListItemAvatar>
-												<Avatar alt={swapi.name} src={swapi.image_url} />
-											</ListItemAvatar>
-										</ListItem>
+										<Fragment>
+											<ListItem key={swapi.id} button onClick={() => this.goToDetailsView('swapi', swapi.id)}>
+												<FavoriteIcon className={classes.icon} />
+												<ListItemText primary={swapi.name} secondary={swapi.category} />
+												<ListItemAvatar>{new CategoryIconsService(swapi.category).getIcon()}</ListItemAvatar>
+											</ListItem>
+											<Divider variant="inset" component="li" />
+										</Fragment>
 									);
-								})}
+								})
+							) : (
+								<Typography variant="body1">No Star wars items liked yet</Typography>
+							)}
 						</List>
 					</Paper>
 				</Grid>
 				<Grid item sm={6} xs={12}>
 					<Paper className={classes.paper}>
 						<List dense={false}>
-							{punkapiList &&
+							{punkapiList.length > 0 ? (
 								punkapiList.map(punkapi => {
 									return (
-										<ListItem button onClick={() => this.goToDetailsView('punkapi', punkapi.id)}>
-											<FavoriteIcon className={classes.icon} />
-											<ListItemText primary={punkapi.name} />
-											<ListItemAvatar>
-												<Avatar alt={punkapi.name} src={punkapi.image_url} />
-											</ListItemAvatar>
-										</ListItem>
+										<Fragment>
+											<ListItem key={punkapi.id} button onClick={() => this.goToDetailsView('punkapi', punkapi.id)}>
+												<FavoriteIcon className={classes.icon} />
+												<ListItemText primary={punkapi.name} />
+												<ListItemAvatar>
+													<Avatar alt={punkapi.name} src={punkapi.image_url} />
+												</ListItemAvatar>
+											</ListItem>
+											<Divider variant="inset" component="li" />
+										</Fragment>
 									);
-								})}
+								})
+							) : (
+								<Typography variant="body1">No beers liked yet</Typography>
+							)}
 						</List>
 					</Paper>
 				</Grid>
