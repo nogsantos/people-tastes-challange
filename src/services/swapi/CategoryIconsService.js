@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import PeopleIcon from '@material-ui/icons/Face';
 import PlanetsIcon from '@material-ui/icons/Public';
 import FilmsIcon from '@material-ui/icons/LocalMovies';
@@ -10,14 +11,10 @@ import StarIcon from '@material-ui/icons/Star';
 /**
  * Default category icons
  */
-class CategoryIconsService {
-	constructor(key) {
-		this.key = key;
-	}
-
-	getIcon = () => {
+class CategoryIconsService extends Component {
+	render() {
 		let component = '';
-		switch (this.key) {
+		switch (this.props.category) {
 			case 'people':
 				component = <PeopleIcon style={{ fontSize: 40 }} />;
 				break;
@@ -41,7 +38,11 @@ class CategoryIconsService {
 				break;
 		}
 		return component;
-	};
+	}
 }
+
+CategoryIconsService.propTypes = {
+	category: PropTypes.string.isRequired
+};
 
 export default CategoryIconsService;

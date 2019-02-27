@@ -107,7 +107,7 @@ class Swapi extends Component {
 										<CardActionArea onClick={() => this.getListByCategory(list[1])}>
 											<Paper className={classes.card} elevation={1}>
 												<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={16}>
-													{new CategoryIconsService(list[1]).getIcon()}{' '}
+													<CategoryIconsService category={list[1]} />
 													<Typography variant="h6">{list[1].toUpperCase()}</Typography>
 												</Grid>
 											</Paper>
