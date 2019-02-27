@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -27,10 +27,16 @@ const styles = theme => ({
 	root: {
 		flexGrow: 1
 	},
+	listContainer: {
+		marginBottom: '10rem'
+	},
 	card: {
 		position: 'relative',
 		padding: '2rem',
 		margin: 0
+	},
+	selected: {
+		backgroundColor: '#f3f3f3'
 	}
 });
 
@@ -43,13 +49,30 @@ class Swapi extends Component {
 			apiListKeys: [],
 			apiListValue: [],
 			category: null,
+			nextPage: null,
 			swapiList: []
 		};
 	}
 
 	componentDidMount() {
+		window.scrollTo(0, 0);
 		this.getApiList();
+		window.addEventListener('scroll', this.handleScroll);
 	}
+
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScroll);
+	}
+
+	handleScroll = () => {
+		if (
+			this.state.category !== null &&
+			this.state.nextPage !== null &&
+			window.innerHeight + window.scrollY >= document.body.offsetHeight
+		) {
+			this.getListByCategory(null, this.state.nextPage);
+		}
+	};
 
 	getApiList = () => {
 		api({
@@ -67,17 +90,28 @@ class Swapi extends Component {
 			});
 	};
 
-	getListByCategory = category => {
-		let list = this.state.apiListValue;
-		this.setState({ loading: true, category: category });
+	getListByCategory = (category, nextPage) => {
+		this.setState({ loading: true });
+		let urlTarget = nextPage;
+		if (!nextPage && category !== null) {
+			let list = this.state.apiListValue;
+			this.setState({
+				category: category,
+				swapiList: []
+			});
+			urlTarget = list[category];
+		}
 		api({
-			url: `${list[category]}`,
+			url: `${urlTarget}`,
 			method: 'get'
 		})
 			.then(response => {
+				let currentList = this.state.swapiList;
+				currentList.push(...response.data.results);
 				this.setState({
 					loading: false,
-					swapiList: response.data.results
+					swapiList: currentList,
+					nextPage: response.data.next
 				});
 			})
 			.catch(error => {
@@ -90,61 +124,68 @@ class Swapi extends Component {
 		const { apiListKeys, swapiList, loading, category } = this.state;
 		const { classes } = this.props;
 		return (
-			<Fragment>
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={8}>
-					<Grid item sm={12} xs={12}>
-						<Typography variant="h3">Star Wars</Typography>
-						<Divider variant="fullWidth" />
-					</Grid>
-					<Grid item sm={12} xs={12}>
-						<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={16}>
-							<Grid item sm={12} xs={12}>
-								<Typography variant="h5">Choose a category</Typography>
-							</Grid>
-							{Object.entries(apiListKeys).map(list => {
-								return (
-									<Grid key={list[0]} item sm={4} xs={12}>
-										<CardActionArea onClick={() => this.getListByCategory(list[1])}>
-											<Paper className={classes.card} elevation={1}>
-												<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={16}>
-													<CategoryIconsService category={list[1]} />
-													<Typography variant="h6">{list[1].toUpperCase()}</Typography>
-												</Grid>
-											</Paper>
-										</CardActionArea>
-									</Grid>
-								);
-							})}
-						</Grid>
-					</Grid>
-					{loading ? (
+			<Grid
+				className={classes.listContainer}
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				spacing={8}
+			>
+				<Grid item sm={12} xs={12}>
+					<Typography variant="h3">Star Wars</Typography>
+					<Divider variant="fullWidth" />
+				</Grid>
+				<Grid item sm={12} xs={12}>
+					<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={16}>
 						<Grid item sm={12} xs={12}>
-							<div className={classes.root}>
-								<LinearProgress variant="query" />
-							</div>
+							<Typography variant="h5">Choose a category</Typography>
 						</Grid>
-					) : (
-						swapiList.map((swapi, index) => {
+						{Object.entries(apiListKeys).map(list => {
 							return (
-								<Grid item key={index} sm={6} xs={12}>
-									<AppCard
-										id={(swapi.name || swapi.title)
-											.trim()
-											.replace(/[`'-/\s]/g, '_')
-											.toLowerCase()}
-										name={swapi.name || swapi.title}
-										tagline={
-											swapi.birth_year || swapi.terrain || swapi.director || swapi.classification || swapi.manufacturer
-										}
-										module="swapi"
-										category={category}
-									/>
+								<Grid key={list[0]} item sm={4} xs={12}>
+									<CardActionArea onClick={() => this.getListByCategory(list[1])}>
+										<Paper
+											className={`${classes.card} ${list[1] === this.state.category ? classes.selected : null}`}
+											elevation={list[1] === this.state.category ? 6 : 1}
+										>
+											<Grid container direction="row" justify="space-between" alignItems="flex-start" spacing={16}>
+												<CategoryIconsService category={list[1]} />
+												<Typography variant="h6">{list[1].toUpperCase()}</Typography>
+											</Grid>
+										</Paper>
+									</CardActionArea>
 								</Grid>
 							);
-						})
-					)}
+						})}
+					</Grid>
 				</Grid>
-			</Fragment>
+				{swapiList.map((swapi, index) => {
+					return (
+						<Grid key={index} item sm={6} xs={12}>
+							<AppCard
+								id={(swapi.name || swapi.title)
+									.trim()
+									.replace(/[`'-/\s]/g, '_')
+									.toLowerCase()}
+								name={swapi.name || swapi.title}
+								tagline={
+									swapi.birth_year || swapi.terrain || swapi.director || swapi.classification || swapi.manufacturer
+								}
+								module="swapi"
+								category={category}
+							/>
+						</Grid>
+					);
+				})}
+				{loading && (
+					<Grid item sm={12} xs={12}>
+						<div className={classes.root}>
+							<LinearProgress variant="query" />
+						</div>
+					</Grid>
+				)}
+			</Grid>
 		);
 	}
 }
