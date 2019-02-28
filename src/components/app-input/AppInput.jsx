@@ -25,6 +25,7 @@ class AppInput extends Component {
 		return (
 			<div className={classes.root}>
 				<TextField
+					data-testid="input-component"
 					className={classNames(classes.margin, classes.textField)}
 					id={this.props.id}
 					variant="outlined"
@@ -35,7 +36,7 @@ class AppInput extends Component {
 					InputProps={
 						this.props.isTypeSearch && {
 							startAdornment: (
-								<InputAdornment position="start">
+								<InputAdornment data-testid="input-search-icon" position="start">
 									<SearchIcon />
 								</InputAdornment>
 							)
