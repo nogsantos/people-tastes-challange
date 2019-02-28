@@ -22,7 +22,7 @@
 			}
 		],
 		"quotes": ["error", "single"],
-		"no-unused-vars": "warn",
+        "no-unused-vars": "warn",
 		"no-undef": "warn",
 		"semi": ["error", "always"],
 		"no-console": ["error", { "allow": ["warn", "error", "log"] }]
