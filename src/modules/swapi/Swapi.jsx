@@ -46,8 +46,6 @@ class Swapi extends Component {
 
 		this.loaderCounter = 0;
 
-		console.log('INIT');
-
 		this.state = {
 			loading: false,
 			apiListKeys: [],
@@ -82,13 +80,11 @@ class Swapi extends Component {
 	};
 
 	getApiList = () => {
-		console.log('get', process.env.REACT_APP_SWAPI_ADDRESS);
 		api({
 			url: `${process.env.REACT_APP_SWAPI_ADDRESS}`,
 			method: 'get'
 		})
 			.then(swapiList => {
-				console.log('swapiList', swapiList);
 				this.setState({
 					apiListKeys: Object.keys(swapiList.data),
 					apiListValue: swapiList.data
