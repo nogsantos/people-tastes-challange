@@ -161,7 +161,6 @@ class AppCard extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-
 		return (
 			<Card key={this.props.id} className={classes.card}>
 				<CardActionArea onClick={this.goToDetailsView}>
@@ -178,17 +177,17 @@ class AppCard extends React.Component {
 						)}
 						<Grid item sm={9} xs={12}>
 							<Grid item sm={12} xs={12} className={classes.title}>
-								<Typography variant="h5" gutterBottom>
+								<Typography data-testid="item-name" variant="h5" gutterBottom>
 									{this.props.name}
 								</Typography>
 								{this.props.tagline && (
-									<Typography variant="caption" gutterBottom>
+									<Typography data-testid="item-caption" variant="caption" gutterBottom>
 										{this.props.tagline}
 									</Typography>
 								)}
 							</Grid>
 							{this.props.description && (
-								<CardContent className={classes.content}>
+								<CardContent data-testid="item-description" className={classes.content}>
 									<Grid item sm={12} xs={12}>
 										<Typography variant="body1">{this.props.description}</Typography>
 									</Grid>
@@ -197,7 +196,7 @@ class AppCard extends React.Component {
 						</Grid>
 					</Grid>
 				</CardActionArea>
-				<CardActions className={classes.actions}>
+				<CardActions data-testid="like-button" className={classes.actions}>
 					<Grid container direction="row" justify="center" alignItems="center">
 						<Tooltip
 							placement="bottom"
@@ -206,6 +205,7 @@ class AppCard extends React.Component {
 							classes={{ tooltip: classes.lightTooltip }}
 						>
 							<IconButton
+								data-testid="like-button-icon"
 								aria-label={this.state.favorited ? 'Liked' : 'Like'}
 								className={classes.iconHover}
 								onClick={this.handleFavorite}
