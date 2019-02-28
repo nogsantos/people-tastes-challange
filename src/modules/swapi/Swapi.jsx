@@ -44,6 +44,8 @@ class Swapi extends Component {
 	constructor(props) {
 		super(props);
 
+		this.loaderCounter = 0;
+
 		this.state = {
 			loading: false,
 			apiListKeys: [],
@@ -70,7 +72,10 @@ class Swapi extends Component {
 			this.state.nextPage !== null &&
 			window.innerHeight + window.scrollY >= document.body.offsetHeight
 		) {
-			this.getListByCategory(null, this.state.nextPage);
+			if (this.loaderCounter === 0) {
+				this.loaderCounter++;
+				this.getListByCategory(null, this.state.nextPage);
+			}
 		}
 	};
 
@@ -113,16 +118,27 @@ class Swapi extends Component {
 					swapiList: currentList,
 					nextPage: response.data.next
 				});
+				this.resetLoaderCounter();
 			})
 			.catch(error => {
 				this.setState({ loading: false });
 				new ErrorHandler(error).catcher();
+				this.resetLoaderCounter();
 			});
+	};
+
+	/**
+	 * Resets loader counter. Loading a page once per time
+	 */
+	resetLoaderCounter = () => {
+		if (this.loaderCounter > 0) {
+			this.loaderCounter = 0;
+		}
 	};
 
 	itemIdMaker = (category, url) => {
 		let idGetter = url.match(/\d+/g);
-		return `${category}#${idGetter[0]}`;
+		return `${category}=${idGetter[0]}`;
 	};
 
 	render() {
