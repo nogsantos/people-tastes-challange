@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  app:
+    container_name: taste-container
+    build:
+      context: ./infra/docker
+      dockerfile: nginx.dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - type: bind
+        source: ./infra/nginx/services/client
+        target: /etc/nginx/conf.d
+      - type: bind
+        source: ./infra/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./infra/nginx/logs
+        target: /var/log/nginx
+      - type: bind
+        source: ./build
+        target: /var/www/public
+    networks:
+      - people-tastes
+volumes:
+  volume:
+networks:
+  people-tastes:
+    driver: bridge
