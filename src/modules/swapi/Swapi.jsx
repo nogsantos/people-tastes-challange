@@ -44,6 +44,8 @@ class Swapi extends Component {
 	constructor(props) {
 		super(props);
 
+		this.loaderCounter = 0;
+
 		this.state = {
 			loading: false,
 			apiListKeys: [],
@@ -70,7 +72,10 @@ class Swapi extends Component {
 			this.state.nextPage !== null &&
 			window.innerHeight + window.scrollY >= document.body.offsetHeight
 		) {
-			this.getListByCategory(null, this.state.nextPage);
+			if (this.loaderCounter === 0) {
+				this.loaderCounter++;
+				this.getListByCategory(null, this.state.nextPage);
+			}
 		}
 	};
 
@@ -113,11 +118,27 @@ class Swapi extends Component {
 					swapiList: currentList,
 					nextPage: response.data.next
 				});
+				this.resetLoaderCounter();
 			})
 			.catch(error => {
 				this.setState({ loading: false });
 				new ErrorHandler(error).catcher();
+				this.resetLoaderCounter();
 			});
+	};
+
+	/**
+	 * Resets loader counter. Loading a page once per time
+	 */
+	resetLoaderCounter = () => {
+		if (this.loaderCounter > 0) {
+			this.loaderCounter = 0;
+		}
+	};
+
+	itemIdMaker = (category, url) => {
+		let idGetter = url.match(/\d+/g);
+		return `${category}=${idGetter[0]}`;
 	};
 
 	render() {
@@ -161,13 +182,11 @@ class Swapi extends Component {
 					</Grid>
 				</Grid>
 				{swapiList.map((swapi, index) => {
+					let itemId = this.itemIdMaker(category, swapi.url);
 					return (
 						<Grid key={index} item sm={6} xs={12}>
 							<AppCard
-								id={(swapi.name || swapi.title)
-									.trim()
-									.replace(/[`'-/\s]/g, '_')
-									.toLowerCase()}
+								id={itemId}
 								name={swapi.name || swapi.title}
 								tagline={
 									swapi.birth_year || swapi.terrain || swapi.director || swapi.classification || swapi.manufacturer
