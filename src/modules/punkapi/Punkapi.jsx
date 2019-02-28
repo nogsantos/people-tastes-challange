@@ -11,8 +11,6 @@ import { ErrorHandler, SuccessHandler } from '../message-handlers/index';
 import { AppCard, AppInput } from '../../components/';
 import { withRouter } from 'react-router';
 
-// import { MockList } from './Mock';
-
 const cache = setupCache({
 	maxAge: 15 * 60 * 1000
 });

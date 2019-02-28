@@ -21,8 +21,6 @@ import { Image } from './Style';
 import { TableContainer } from '../../../AppStyle';
 import { DetailsStatelessRender } from './DetailsStatelessRender';
 
-// import { MockBeer } from '../Mock';
-
 const cache = setupCache({
 	maxAge: 15 * 60 * 1000
 });
@@ -83,8 +81,6 @@ class PunkapiDetails extends Component {
 		if (this.props.match.params.id) {
 			this.getDetail(this.props.match.params.id);
 		}
-
-		// this.setState({ beer: Object.assign({}, MockBeer()) }, () => this.checkIfIsFavorited());
 	}
 
 	getDetail = id => {
