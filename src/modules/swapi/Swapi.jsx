@@ -120,6 +120,11 @@ class Swapi extends Component {
 			});
 	};
 
+	itemIdMaker = (category, url) => {
+		let idGetter = url.match(/\d+/g);
+		return `${category}#${idGetter[0]}`;
+	};
+
 	render() {
 		const { apiListKeys, swapiList, loading, category } = this.state;
 		const { classes } = this.props;
@@ -161,13 +166,11 @@ class Swapi extends Component {
 					</Grid>
 				</Grid>
 				{swapiList.map((swapi, index) => {
+					let itemId = this.itemIdMaker(category, swapi.url);
 					return (
 						<Grid key={index} item sm={6} xs={12}>
 							<AppCard
-								id={(swapi.name || swapi.title)
-									.trim()
-									.replace(/[`'-/\s]/g, '_')
-									.toLowerCase()}
+								id={itemId}
 								name={swapi.name || swapi.title}
 								tagline={
 									swapi.birth_year || swapi.terrain || swapi.director || swapi.classification || swapi.manufacturer
